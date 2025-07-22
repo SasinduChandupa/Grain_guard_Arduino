@@ -20,15 +20,15 @@ const int LOADCELL_SCK_PIN = 13;
 
 HX711 scale; 
 
-static float calibration_factor = -1000; // Initial calibration 
+static float calibration_factor = -1000; // Initial calibration for get empty value 0g
 
 
 WiFiUDP ntpUDP;
 
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 19800, 60000); // Update every 60 seconds
 
-float last_uploaded_weight = -999.0; // Stores the last weight successfully uploaded to Firebase
-const float WEIGHT_CHANGE_THRESHOLD = 1.0; // Minimum change in grams to trigger a new upload
+float last_uploaded_weight = -999.0; 
+const float WEIGHT_CHANGE_THRESHOLD = 1.0; 
 
 void setup() {
   Serial.begin(9600);
@@ -64,7 +64,7 @@ void setup() {
     if (readValue == "Testing") {
       Serial.println("Firebase read successful!");
       Serial.println("Firebase connection verified!");
-      firebase.setString("Status", "Device Connected"); // device status in Firebase
+      firebase.setString("Status", "Device Connected"); 
     } else {
       Serial.println("Failed to read from Firebase - connection issue.");
       Serial.print("Received value: ");
@@ -95,9 +95,9 @@ void setup() {
 
   // (set current reading as zero)
   Serial.println("\nTaring the scale (removing current weight as zero)...");
-  scale.tare(20); // Tare by taking 20 readings and averaging
+  scale.tare(20); 
 
-  scale.set_scale(calibration_factor); // Apply the initial calibration factor
+  scale.set_scale(calibration_factor); 
 
   Serial.println("\n--- Ready for Weight Measurement ---");
   Serial.println("Place known weight to calibrate.");
@@ -107,11 +107,11 @@ void setup() {
 void loop() {
 
   float units = scale.get_units(10);
-  float weight_grams = units * 3.12; // multiply scale value in 3.12 to get correct value
+  float weight_grams = units * 3.12; 
 
-  // --- Print to Serial Monitor ---
+  
   Serial.print("Weight: ");
-  Serial.print(weight_grams, 2); // 2 decimal places
+  Serial.print(weight_grams, 2); // 0.00 decimal
   Serial.print("g");
   Serial.print(" | Factor: ");
   Serial.println(calibration_factor);
@@ -148,7 +148,7 @@ void loop() {
       Serial.print(" -> ");
       Serial.print(weight_grams, 2);
       Serial.println("g");
-      last_uploaded_weight = weight_grams; // Update last uploaded weight
+      last_uploaded_weight = weight_grams; 
     } else {
       Serial.println("Firebase 'weightHistory' upload failed!");
     }
@@ -180,6 +180,6 @@ void loop() {
     }
   }
 
-  // --- Loop Delay ---
-  delay(2000); // Delay for 2 seconds before next reading/upload cycle
+  
+  delay(2000);
 }
