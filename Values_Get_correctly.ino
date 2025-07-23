@@ -11,7 +11,7 @@
 #define REFERENCE_URL "https://grainguard-1cbcb-default-rtdb.firebaseio.com/" 
 
 const String USER_ID = "Fr7Ycngqu1pTVrZK6E0A"; //  user ID
-const String CONTAINER_TYPE = "rice";       // container (e.g., "rice", "dal", etc.)
+const String CONTAINER_TYPE = "rice";       // container name
 
 Firebase firebase(REFERENCE_URL); 
 
@@ -20,12 +20,12 @@ const int LOADCELL_SCK_PIN = 13;
 
 HX711 scale; 
 
-static float calibration_factor = -1000; // Initial calibration for get empty value 0g
+static float calibration_factor = -1000; 
 
 
 WiFiUDP ntpUDP;
 
-NTPClient timeClient(ntpUDP, "pool.ntp.org", 19800, 60000); // Update every 60 seconds
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 19800, 60000); 
 
 float last_uploaded_weight = -999.0; 
 const float WEIGHT_CHANGE_THRESHOLD = 1.0; 
@@ -85,7 +85,7 @@ void setup() {
   scale.power_up();
 
   Serial.println("\n--- HX711 Initial Raw Value Check (no weight) ---");
-  for (int i = 0; i < 5; i++) { // Read 5 raw values
+  for (int i = 0; i < 5; i++) { 
     Serial.print("Raw reading ");
     Serial.print(i + 1);
     Serial.print(": ");
@@ -93,7 +93,7 @@ void setup() {
     delay(200);
   }
 
-  // (set current reading as zero)
+  // (set current reading = zero)
   Serial.println("\nTaring the scale (removing current weight as zero)...");
   scale.tare(20); 
 
@@ -111,7 +111,7 @@ void loop() {
 
   
   Serial.print("Weight: ");
-  Serial.print(weight_grams, 2); // 0.00 decimal
+  Serial.print(weight_grams, 2);
   Serial.print("g");
   Serial.print(" | Factor: ");
   Serial.println(calibration_factor);
